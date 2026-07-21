@@ -1,0 +1,26 @@
+# Reports
+reports/
+allure-results/
+allure-report/
+
+# Test screenshots
+screenshots/
+
+# Playwright generated files
+test-results/
+playwright-report/
+
+# Pytest cache
+.pytest_cache/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+
+# PyCharm
+.idea/
+
+.vscode/
