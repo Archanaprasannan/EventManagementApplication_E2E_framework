@@ -1,3 +1,4 @@
+
 # Playwright Python End-to-End Test Automation Framework
 
 This repository contains a comprehensive **hybrid test automation framework** for E2E testing of the **EventHub** web application. It is built using **Python**, **Playwright**, and **Pytest**, implementing clean Page Object Models (POM) for UI tests and structured API clients for API testing.
@@ -215,3 +216,7 @@ HTML reporting is outputted to `reports/report.html`.
 ### 3. Reporting
 Allure results are outputted to `reports/allure-results/`.
 HTML reporting is outputted to `reports/report.html`.
+
+# EventManagementApplication_E2E_framework
+Automation framework for handling an EventManagement application : UI automation, E2E automation, API automation
+

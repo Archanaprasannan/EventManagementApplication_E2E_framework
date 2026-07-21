@@ -16,11 +16,31 @@ playwright-report/
 # Python cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
 # Virtual environment
 .venv/
+venv/
+env/
+
+# Environment variables
+.env
 
 # PyCharm
 .idea/
 
+# VS Code
 .vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+
+# Temporary files
+tempCodeRunnerFile.py
