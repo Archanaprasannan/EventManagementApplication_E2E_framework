@@ -9,7 +9,7 @@ class BookingPage(BasePage):
         self.customer_phone=page.locator("#phone")
         self.confirm_booking_button=page.locator("#confirm-booking")
         self.confirm_booking_message=page.locator("//div[@class='text-center py-6']//h3")
-        self.button=page.locator("#button")
+        self.button=page.locator("#helllo")
         
 
     def do_booking(self,name,email,phone):
