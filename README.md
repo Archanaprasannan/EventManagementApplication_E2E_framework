@@ -131,7 +131,6 @@ PlaywrightE2EFramework/
 
 ### 🌐 UI Tests (`tests/ui/`)
 
-#### 1. **Login Page Tests (`TestLoginPage` in `login_page_test.py`)**
 | TC ID | Test Case Function | Description |
 | :--- | :--- | :--- |
 | **TC_001** | `test_get_login_page_title` | Verifies the login page displays the title `EventHub — Discover & Book Events`. |
@@ -144,48 +143,40 @@ PlaywrightE2EFramework/
 | **TC_008** | `test_login_with_blank_email` | Attempts sign-in with empty email and checks for validation feedback `Enter a valid email`. |
 | **TC_009** | `test_login_with_blank_password` | Attempts sign-in with valid email but blank password, asserting validation: `Password must be at least 6 characters`. |
 | **TC_010** | `test_do_valid_login` | Enters configuration credentials, clicks login, and asserts redirection to the homepage. |
+| **TC_011** | `test_home_page_title` | Asserts title after successful login routing. |
+| **TC_012** | `test_home_page_url` | Asserts the URL matches the application base URL post-authentication. |
+| **TC_013** | `test_user_profile_icon_visible` | Validates that the active user's profile display element is visible on the top nav. |
+| **TC_014** | `test_logout_button_visible` | Validates that the logout button element is present. |
+| **TC_015** | `test_navigation_menu_visible` | Confirms the responsive top navigation menu bar is displayed. |
+| **TC_016** | `test_browse_events_visible` | Validates that the user can locate the "Browse Events" button. |
+| **TC_017** | `test_upcoming_events_section_visible` | Confirms that dynamic event cards are rendering correctly inside the upcoming events container. |
+| **TC_018** | `test_my_bookings_link_visible` | Asserts visibility of the "My Bookings" button/link in the menu. |
+| **TC_019** | `test_my_booking_page_title` | Verifies the page title once navigated to the My Bookings tab. |
+| **TC_020** | `test_my_booking_page_url` | Verifies the page URL matches expectations. |
+| **TC_021** | `test_my_booking_page_url` | Verifies the page URL matches expectations. |
+| **TC_022** | `test_search_event_with_keyword` | Searches for an event using a keyword and verifies the count of events displayed. |
+| **TC_023** | `test_get_event_page_title` | Verifies the page title once navigated to the Events tab. |
+| **TC_024** | `test_get_event_page_url` | Verifies the page URL matches expectations. |
+| **TC_025** | `test_admin_page_title` | Verifies the admin page title. |
+| **TC_026** | `test_admin_page_url` | Verifies the admin page url. |
+| **TC_027** | `test_admin_logout_button_visibility` | Verifies admin logout button is visible. |
+| **TC_028** | `test_admin_add_event_button_visibility` | Verifies admin add event button is visible. |
+| **TC_029** | `test_admin_edit_event_button_visibility` | Verifies admin edit event button is visible. |
+| **TC_030** | `test_admin_delete_event_button_visibility` | Verifies admin delete event button is visible. |
+| **TC_031** | `test_add_event` | Verifies add event. |
+| **TC_032** | `test_edit_event` | Verifies edit event. |
+| **TC_033** | `test_delete_event` | Verifies delete event. |
 
-#### 2. **Homepage Tests (`TestHomePage` in `home_page_test.py`)**
+
+### ⚙️ API Tests (`tests/api/`)
+
 | TC ID | Test Case Function | Description |
 | :--- | :--- | :--- |
-| **TC_001** | `test_home_page_title` | Asserts title after successful login routing. |
-| **TC_002** | `test_home_page_url` | Asserts the URL matches the application base URL post-authentication. |
-| **TC_003** | `test_user_profile_icon_visible` | Validates that the active user's profile display element is visible on the top nav. |
-| **TC_004** | `test_logout_button_visible` | Validates that the logout button element is present. |
-| **TC_005** | `test_navigation_menu_visible` | Confirms the responsive top navigation menu bar is displayed. |
-| **TC_006** | `test_browse_events_visible` | Validates that the user can locate the "Browse Events" button. |
-| **TC_007** | `test_upcoming_events_section_visible` | Confirms that dynamic event cards are rendering correctly inside the upcoming events container. |
-| **TC_008** | `test_my_bookings_link_visible` | Asserts visibility of the "My Bookings" button/link in the menu. |
-
-#### 3. **Event Page Tests (`TestEventPage` in `event_page_test.py`)**
-| TC ID | Test Case Function | Description |
-| :--- | :--- | :--- |
-| **TC_003** | `test_event_page_title` | Verifies the page title once navigated to the Events tab. |
-| **TC_004** | `test_event_page_url` | Verifies the page URL matches expectations. |
-
-
----
-
-### 🔌 API Tests (`tests/api/`)
-
-#### 1. **Authentication API Tests (`TestLoginPageAPI` in `login_api_test.py`)**
-| TC ID | Test Case Function | Description |
-| :--- | :--- | :--- |
-| **TC_API_001** | `test_login_api` | Sends credentials via POST to `/api/auth/login` and asserts response code `200`, `success=True`, presence of JWT token, and matching user email profile. |
-
-#### 2. **Events API Tests (`TestAllEventsAPI` in `events_api_test.py`)**
-| TC ID | Test Case Function | Description |
-| :--- | :--- | :--- |
-| **TC_API_002** | `test_all_events` | Performs dynamic GET query `/api/events` and verifies status code `200` and events count > `0`. |
-| **TC_API_003** | `test_event_by_id` | Fetches a target event by ID, asserting response code `200` and matching ID parameters. |
-| **TC_API_004** | `test_event_details_by_id` | Compares a single event's query details (`title`, `venue`, `price`) against full lists data object validation. |
-
-#### 3. **Bookings API Tests (`TestBookingsAPI` in `bookings_api_test.py`)**
-| TC ID | Test Case Function | Description |
-| :--- | :--- | :--- |
-| **TC_API_005** | `test_create_booking` | Submits a customer booking JSON payload. Validates response code `201` and confirms event booking parameters in response data. |
-| **TC_API_006** | `test_get_my_bookings` | Queries the active bookings database by booking ID and asserts returned values map correctly to original properties. |
-| **TC_API_007** | `test_cancel_booking` | Issues a cancellation request via DELETE. Asserts code `200` and validation message `Booking cancelled`. |
+| **TC_034** | `test_api_login_with_valid_credentials` | Logs in with valid credentials and retrieves an authorization token. |
+| **TC_035** | `test_api_login_with_invalid_credentials` | Attempts to log in with invalid credentials and asserts that an error is returned. |
+| **TC_036** | `test_api_get_all_events` | Retrieves a list of all available events. |
+| **TC_037** | `test_api_get_events_with_valid_token` | Retrieves events using a valid authorization token. |
+| **TC_038** | `test_api_get_events_with_invalid_token` | Attempts to retrieve events with an invalid or expired token. |
 
 ---
 
