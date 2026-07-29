@@ -8,6 +8,10 @@ from utils.date_and_time import DateAndTime
 
 
 class TestAdminPage:
+    def test_admin_page_title(self, admin_page):
+        actual_title = admin_page.get_admin_page_title()
+        assert actual_title == AppConstants.EXPECTED_ADMIN_PAGE_TITLE
+
     def test_add_event(self, admin_page, event_data):
         admin_page.add_event(
             title=event_data["title"],
@@ -18,7 +22,7 @@ class TestAdminPage:
             price=event_data["price"],
             seats=event_data["seats"]
         )
-        event_row = admin_page.get_event_row(event_data["title"])
+        event_row= admin_page.get_event_row(event_data["title"])
         expect(event_row).to_be_visible()
         expect(admin_page.get_event_title_locator(event_row)).to_have_text(event_data["title"])
         expect(admin_page.get_event_category(event_row)).to_have_text(event_data["category"])
@@ -43,7 +47,7 @@ class TestAdminPage:
 
         # Find created event
         original_row = admin_page.get_event_row(event_data["title"])
-
+        expect(original_row).to_be_visible()
         # Edit
         new_title = f"Edited {event_data['title']}"
         admin_page.edit_event(original_row,new_title ,
@@ -51,12 +55,28 @@ class TestAdminPage:
 
         # Verify
         edited_row = admin_page.get_event_row(new_title)
-
+        expect(edited_row).to_be_visible()
         # Use expect() for elements(buttons, labels, messages, table cells before processing).
         # Use assert for data(parsed text, numbers, dates, API responses, calculated values).
         actual_title= admin_page.get_event_title_text(edited_row)
         assert actual_title==new_title
         assert admin_page.get_event_price_text(edited_row)==AppConstants.EDITED_PRICE
 
-    #def test_delete_event(self, admin_page, event_data):
+    def test_delete_event(self, admin_page, event_data):
+        # Create event first
+        admin_page.add_event(title=event_data["title"], description=event_data["description"],
+                             category=event_data["category"],
+                             city=event_data["city"], venue=event_data["venue"], price=event_data["price"],
+                             seats=event_data["seats"])
+
+        # Find created event
+        original_row = admin_page.get_event_row(event_data["title"])
+        expect(original_row).to_be_visible()
+        # Delete
+        admin_page.delete_event(original_row)
+
+        # Verify
+        event_row=admin_page.get_event_row(event_data["title"])
+        expect(event_row).not_to_be_visible()
+
 

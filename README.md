@@ -3,6 +3,13 @@
 
 This repository contains a comprehensive **hybrid test automation framework** for E2E testing of the **EventHub** web application. It is built using **Python**, **Playwright**, and **Pytest**, implementing clean Page Object Models (POM) for UI tests and structured API clients for API testing.
 
+Application_URL:https://eventhub.rahulshettyacademy.com/login
+browser types
+Edge
+Chromium
+Firefox
+Execution Modes: Headed/Headless
+
 ---
 
 ## 📁 Project Directory Structure
@@ -27,7 +34,7 @@ PlaywrightE2EFramework/
 │   ├── homepage.py        # Homepage actions, elements, and assertions
 │   ├── loginpage.py       # Login Page actions, validations, and forms
 │   ├── mybookingpage.py   # Bookings listing Page (skeleton)
-│   └── paymentpage.py     # Checkout/Payment Page (skeleton)
+│  
 ├── reports/               # Test execution reports and artifacts
 │   ├── allure-results/    # Raw Allure test result JSON files
 │   └── report.html        # Auto-generated Pytest HTML execution report
@@ -57,8 +64,6 @@ PlaywrightE2EFramework/
 
 ---
 
-## 📂 File & Class Inventory
-
 ### 🖥️ Page Objects (`pages/`)
 
 #### 📄 `basepage.py`
@@ -77,9 +82,9 @@ PlaywrightE2EFramework/
 - **Class:** `EventPage(BasePage)`
 - **Purpose:** Models the Event searching and discovery layout. Manages the event search text field, result assertions, and booking redirects.
 
-#### 📄 `bookingpage.py`, `mybookingpage.py`, `paymentpage.py`
-- **Classes:** `BookingPage(BasePage)`, `MyBookingpage(BasePage)`, `Paymentpage(BasePage)`
-- **Purpose:** Reusable skeletons configured to model booking registration, invoice payments, and listing/cancellation dashboard checks.
+#### 📄 `bookingpage.py`, `mybookingpage.py`
+- **Classes:** `BookingPage(BasePage)`, `MyBookingpage(BasePage)`
+- **Purpose:** Reusable skeletons configured to model booking registration,  and listing/cancellation dashboard checks.
 
 ---
 
@@ -158,6 +163,7 @@ PlaywrightE2EFramework/
 | **TC_003** | `test_event_page_title` | Verifies the page title once navigated to the Events tab. |
 | **TC_004** | `test_event_page_url` | Verifies the page URL matches expectations. |
 
+
 ---
 
 ### 🔌 API Tests (`tests/api/`)
@@ -208,10 +214,6 @@ pytest -m api
 # Run regression suite
 pytest -m regression
 ```
-
-### 3. Reporting
-Allure results are outputted to `reports/allure-results/`.
-HTML reporting is outputted to `reports/report.html`.
 
 ### 3. Reporting
 Allure results are outputted to `reports/allure-results/`.

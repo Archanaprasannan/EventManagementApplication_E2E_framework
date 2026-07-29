@@ -23,6 +23,9 @@ class AppConstants:
     INVALID_EVENT_NAME="Invalid Event"
     DROPDOWN_CATEGORY_VALUE="Concert"
 
+    #admin page
+    EXPECTED_ADMIN_PAGE_TITLE="EventHub — Discover & Book Events"
+
     #admin page: create event
     DESCRIPTION="Art workshop for students"
     CATEGORY="Festival"

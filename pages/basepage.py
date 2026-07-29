@@ -41,3 +41,22 @@ class BasePage:
         locator.select_option(label=label)
     def select_dropdown_value_by_value(self,locator,value):
         locator.select_option(value=value)
+#Handle alert
+    def accept_alert(self):
+        self.page.once("dialog",lambda dialog: dialog.accept())
+
+
+    def accept_confirm(self):
+        self.page.once("dialog",lambda dialog: dialog.accept())
+
+
+    def dismiss_confirm(self):
+        self.page.once("dialog",lambda dialog: dialog.dismiss())
+
+
+    def accept_prompt(self, text):
+        self.page.once("dialog",lambda dialog: dialog.accept(text))
+
+
+    def dismiss_prompt(self):
+        self.page.once( "dialog",lambda dialog: dialog.dismiss())

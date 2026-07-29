@@ -6,6 +6,9 @@ from utils.date_and_time import DateAndTime
 
 
 class AdminPage(BasePage):
+    def get_admin_page_title(self):
+        return self.get_page_title()
+
     def __init__(self,page):
         super().__init__(page)
         self.event_title=page.locator("#event-title-input")
@@ -22,6 +25,7 @@ class AdminPage(BasePage):
         #this is a stable locator
         self.result_table = page.locator("table tbody tr")
         self.update_button=page.locator("//button[@type='submit']")
+        self.delete_event_button=page.get_by_test_id("confirm-dialog-yes")
 
 
     def add_event(self, title, description, category, city, venue, price, seats):
@@ -42,15 +46,19 @@ class AdminPage(BasePage):
         expect(self.result_table.filter(has_text=title)).to_be_visible(timeout=10000)
 
 
+    # def get_event_row(self, event_title):
+    #     row = self.result_table.filter(
+    #         has_text=event_title
+    #     )
+    #
+    #     expect(row).to_be_visible(timeout=10000)
+    #
+    #     return row
+
     def get_event_row(self, event_title):
-        row = self.result_table.filter(
+        return self.result_table.filter(
             has_text=event_title
         )
-
-        expect(row).to_be_visible(timeout=10000)
-
-        return row
-
 
     # def get_event_row(self):
     #     return self.result_table.filter(has_text=AppConstants.TITLE)
@@ -90,4 +98,19 @@ class AdminPage(BasePage):
         self.click(self.update_button)
        # print(self.result_table.all_text_contents())
         self.wait_for_element(self.result_table.filter(has_text=new_title))
+
+    def delete_event(self,row):
+        delete_button=row.get_by_test_id("delete-event-btn")
+        # Click row Delete button
+        self.click(delete_button)
+        # Wait for confirmation modal
+        expect(self.delete_event_button).to_be_visible()
+        # Confirm deletion
+        self.click(self.delete_event_button)
+        # # Verify row disappears
+        # expect(row).not_to_be_visible()
+
+
+
+
 
