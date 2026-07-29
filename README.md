@@ -4,10 +4,12 @@
 This repository contains a comprehensive **hybrid test automation framework** for E2E testing of the **EventHub** web application. It is built using **Python**, **Playwright**, and **Pytest**, implementing clean Page Object Models (POM) for UI tests and structured API clients for API testing.
 
 Application_URL:https://eventhub.rahulshettyacademy.com/login
-browser types
+
+browser types:
 Edge
 Chromium
 Firefox
+
 Execution Modes: Headed/Headless
 
 ---
