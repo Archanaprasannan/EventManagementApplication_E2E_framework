@@ -14,7 +14,7 @@ from pages.loginpage import LoginPage
 from utils.config_reader_util import ConfigReader
 from utils.randomdata_util import Randomdata
 
-
+print("************ conftest loaded ************")
 # create fixture for setup and tear down of the browser
 @pytest.fixture(scope="function")
 def setup_and_teardown(playwright: Playwright):
