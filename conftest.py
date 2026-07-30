@@ -1,4 +1,5 @@
 # contain Python code,fixtures and hooks for pytest
+import os
 from datetime import datetime
 
 import allure
@@ -25,6 +26,33 @@ def setup_and_teardown(playwright: Playwright):
     yield page
     context.close()
     browser.close()
+
+#environment setup
+# def pytest_addoption(parser):
+#     parser.addoption(
+#         "--env",
+#         action="store",
+#         default=os.getenv("ENV", "qa"),
+#         help="Environment"
+#     )
+
+def pytest_addoption(parser):
+
+    parser.addoption(
+        "--env",
+        action="store",
+        default="qa",
+        help="Environment name"
+    )
+
+
+def pytest_configure(config):
+
+    env = config.getoption("--env")
+
+    print(f"\nSelected Environment: {env}")
+
+    ConfigReader.load_config(env)
 
 
 @pytest.fixture

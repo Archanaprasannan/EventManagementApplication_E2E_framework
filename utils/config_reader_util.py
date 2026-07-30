@@ -5,14 +5,39 @@
 #     config.read('utils/config.ini')
 #     print(config.get(section, key))
 # read_config('basic info', 'url')
-
+import os
 from configparser import ConfigParser
 
 class ConfigReader:
 
     config = ConfigParser()
 
-    config.read("configs/config_qa.ini")
+    config = ConfigParser()
+
+    @classmethod
+    def load_config(cls, env):
+        config_path = os.path.join(
+            "configs",
+            f"config_{env}.ini"
+        )
+
+        print(f"\nLoading config: {config_path}")
+
+        cls.config.read(config_path)
+    # @classmethod
+    # def load_config(cls, env):
+    #     env = os.getenv("ENV", "qa")
+    #
+    #     config_path = f"configs/config_{env}.ini"
+    #
+    #     print(f"Loading environment : {env}")
+    #     print(f"Config path : {config_path}")
+    #
+    #     loaded_files = cls.config.read(config_path)
+    #
+    #     print(f"Loaded files : {loaded_files}")
+    #
+    #     print(cls.config.sections())
 
     @classmethod
     def get_ui_url(cls):
