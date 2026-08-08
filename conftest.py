@@ -2,6 +2,7 @@
 import os
 from datetime import datetime
 
+
 import allure
 import pytest
 from playwright.sync_api import Playwright
@@ -10,34 +11,65 @@ from api.auth_api import AuthAPI
 from api.bookings_api import BookingsAPI
 from api.events_api import  EventsAPI
 from constants.appconstants import AppConstants
+
 from pages.loginpage import LoginPage
 from utils.config_reader_util import ConfigReader
+from utils.logger_util import Logger
 from utils.randomdata_util import Randomdata
 
-print("************ conftest loaded ************")
+logger = Logger.get_logger(__name__)
+#cross browser testing using command line option
 # create fixture for setup and tear down of the browser
-@pytest.fixture(scope="function")
-def setup_and_teardown(playwright: Playwright):
-    browser = getattr(playwright, ConfigReader.get_browser()).launch(headless=ConfigReader.get_headless())
-    # viewport={"width": 1920, "height": 1080
-    context = browser.new_context()
-    page = context.new_page()
-    page.goto(ConfigReader.get_ui_url())
-    yield page
-    context.close()
-    browser.close()
+@pytest.fixture(scope="session")
+def browser_setup(playwright: Playwright, request):
+    context = None
+    browser = None
+    try:
+        # add logger if browser not launch
+        logger.info("Launching browser")
+        browsers = request.config.getoption("--browser")
+        if browsers:
+            browser_name = browsers[0]
+        else:
+            browser_name = ConfigReader.get_browser()
 
-#environment setup
-# def pytest_addoption(parser):
-#     parser.addoption(
-#         "--env",
-#         action="store",
-#         default=os.getenv("ENV", "qa"),
-#         help="Environment"
-#     )
+        # browser = getattr(playwright, ConfigReader.get_browser()).launch(headless=ConfigReader.get_headless())
+        # browser = getattr(playwright, ConfigReader.get_browser()).launch(headless=ConfigReader.get_headless())
+
+        browser = getattr(playwright, browser_name).launch(headless=ConfigReader.get_headless())
+        logger.info("Browser launched successfully")
+        yield browser
+    except Exception:
+        logger.exception("Error during browser setup")
+        raise
+
+    finally:
+        if browser:
+            browser.close()
+            logger.info("Browser closed successfully")
+
+
+@pytest.fixture(scope="function")
+def setup_and_teardown(browser_setup):
+    context=None
+    try:
+        context = browser_setup.new_context()
+        logger.info("Browser context created successfully")
+        page = context.new_page()
+        page.goto(ConfigReader.get_ui_url())
+        logger.info("Navigated to UI URL")
+        yield page
+    except Exception:
+        logger.exception("Error during browser setup")
+        raise
+    finally:
+        if context:
+            context.close()
+            logger.info("Browser context closed successfully")
+
+
 
 def pytest_addoption(parser):
-
     parser.addoption(
         "--env",
         action="store",
@@ -47,13 +79,13 @@ def pytest_addoption(parser):
 
 
 def pytest_configure(config):
-
     env = config.getoption("--env")
-
-    print(f"\nSelected Environment: {env}")
+    browser = config.getoption("--browser")
 
     ConfigReader.load_config(env)
 
+    print(f"Environment : {env}")
+    print(f"Browser : {browser}")
 
 @pytest.fixture
 def login_page(setup_and_teardown):
@@ -158,3 +190,33 @@ def get_booking_details(bookings_api,auth_token):
     all_booking_data = all_booking.json()["data"]
     first_booking_data = all_booking_data[0]
     return first_booking_data
+
+#fixture parameterization for cross browser testing
+# @pytest.fixture(scope="function",params=["chromium", "firefox"])
+# def setup_and_teardown(playwright: Playwright, request):
+#     browser = None
+#     context = None
+#     try:
+#         browser_name = request.param
+#         logger.info(f"Launching {browser_name} browser")
+#         browser = getattr(playwright, browser_name).launch(headless=ConfigReader.get_headless())
+#         logger.info(f"{browser_name} browser launched successfully")
+#         context = browser.new_context()
+#         logger.info("Browser context created successfully")
+#         page = context.new_page()
+#         page.goto(ConfigReader.get_ui_url())
+#         logger.info("Navigated to UI URL")
+#         yield page
+#
+#     except Exception:
+#         logger.exception("Error during browser setup")
+#         raise
+#
+#     finally:
+#         if context:
+#             context.close()
+#             logger.info("Browser context closed successfully")
+#
+#         if browser:
+#             browser.close()
+#             logger.info("Browser closed successfully")

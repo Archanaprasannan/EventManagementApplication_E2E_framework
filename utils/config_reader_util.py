@@ -22,9 +22,13 @@ class ConfigReader:
         )
 
         print(f"\nLoading config: {config_path}")
+        try:
+            cls.config.read(config_path)
+        except FileNotFoundError as e:
+            logger.error(f"Configuration file not found: {e}")
+            raise
 
-        cls.config.read(config_path)
-    # @classmethod
+        # @classmethod
     # def load_config(cls, env):
     #     env = os.getenv("ENV", "qa")
     #

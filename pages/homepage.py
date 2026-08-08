@@ -1,3 +1,4 @@
+from logs.logger_util import Logger
 from pages.basepage import BasePage
 from playwright.sync_api import expect
 from pages.eventpage import EventPage
@@ -6,6 +7,7 @@ from pages.eventpage import EventPage
 class HomePage(BasePage):
     def __init__(self, page):
         super().__init__(page)
+        self.logger = Logger.get_logger(self.__class__.__name__)
         self.user_profile=page.locator("#user-email-display")
         self.user_profile.wait_for(state='visible',timeout=10000)
         self.logout_button=page.locator("#logout-btn")
@@ -15,35 +17,57 @@ class HomePage(BasePage):
         self.my_bookings_link=page.get_by_role("button", name="My Bookings")
 
     def get_home_page_url(self):
+        self.logger.info("Getting home page url")
         return self.get_page_url()
 
     def get_home_page_title(self):
+        self.logger.info("Getting home page title")
         return self.get_page_title()
 
     def is_user_profile_icon_visible(self):
+        self.logger.info("Checking if user profile icon is visible")
         return self.is_visible(self.user_profile)
 
     def is_logout_button_visible(self):
+        self.logger.info("Checking if logout button is visible")
         return self.is_visible(self.logout_button)
 
     def is_navigation_menu_visible(self):
+        self.logger.info("Checking if navigation menu is visible")
         return self.is_visible(self.navigation_menu)
 
     def is_browse_events_button_visible(self):
+        self.logger.info("Checking if browse events button is visible")
         return self.is_visible(self.browse_events_button)
 
     def is_upcoming_events_section_visible(self):
+        self.logger.info("Checking if upcoming events section is visible")
         expect(self.upcoming_events_section.first).to_be_visible(timeout=5000)
         return self.upcoming_events_section.first.is_visible()
 
     def is_my_bookings_link_visible(self):
+        self.logger.info("Checking if my bookings link is visible")
         return self.is_visible(self.my_bookings_link)
 
     def do_browse_events(self):
-        self.click(self.browse_events_button)
-        return EventPage(self.page)
+        try:
+            self.logger.info("Browsing events")
+            self.click(self.browse_events_button)
+            self.logger.info("Navigated to event page")
+            return EventPage(self.page)
+        except Exception as e:
+            self.logger.error("Browse events failed")
+            raise e
     
-    
+    def do_logout(self):
+        try:
+            self.logger.info("Logging out")
+            self.click(self.logout_button)
+            self.logger.info("Logged out successfully")
+            return LoginPage(self.page)
+        except Exception as e:
+            self.logger.error("Logout failed")
+            raise e
 
 
     

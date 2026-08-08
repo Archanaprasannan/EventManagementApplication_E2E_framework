@@ -44,3 +44,7 @@ coverage.xml
 
 # Temporary files
 tempCodeRunnerFile.py
+
+# Ignore generated automation logs
+logs/automation_*.log
+

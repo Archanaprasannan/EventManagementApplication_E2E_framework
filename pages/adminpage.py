@@ -1,6 +1,7 @@
 from playwright.sync_api import Page,expect
 
 from constants.appconstants import AppConstants
+from logs.logger_util import Logger
 from pages.basepage import BasePage
 from utils.date_and_time import DateAndTime
 
@@ -11,6 +12,7 @@ class AdminPage(BasePage):
 
     def __init__(self,page):
         super().__init__(page)
+        self.logger = Logger.get_logger(self.__class__.__name__)
         self.event_title=page.locator("#event-title-input")
         self.event_description=page.get_by_placeholder("Describe the event…")
         self.category=page.locator("#category")
@@ -29,6 +31,7 @@ class AdminPage(BasePage):
 
 
     def add_event(self, title, description, category, city, venue, price, seats):
+        self.logger.info("Adding event with title: %s, description: %s, category: %s, city: %s, venue: %s, price: %s, seats: %s", title, description, category, city, venue, price, seats)
         self.enter_text(self.event_title,title)
         self.enter_text(self.event_description,description)
         self.select_dropdown_value_by_value(self.category,category)
@@ -42,6 +45,7 @@ class AdminPage(BasePage):
         self.enter_text(self.price,price)
         self.enter_text(self.total_seat,seats)
         self.click(self.add_event_button)
+        self.logger.info("Event added successfully")
         # wait for newly created event
         expect(self.result_table.filter(has_text=title)).to_be_visible(timeout=10000)
 
@@ -56,6 +60,7 @@ class AdminPage(BasePage):
     #     return row
 
     def get_event_row(self, event_title):
+        self.logger.info("Getting event row with title: %s", event_title)
         return self.result_table.filter(
             has_text=event_title
         )
@@ -64,42 +69,53 @@ class AdminPage(BasePage):
     #     return self.result_table.filter(has_text=AppConstants.TITLE)
 
     def get_event_title_locator(self, row):
+        self.logger.info("Getting event title locator")
         return row.locator("td").nth(0)
 
     def get_event_title_text(self, row):
+        self.logger.info("Getting event title text")
         return self.get_event_title_locator(row).text_content().strip()
 
     def get_event_category(self, row):
+        self.logger.info("Getting event category")
         return row.locator("td").nth(1)
 
     def get_event_city(self, row):
+        self.logger.info("Getting event city")
         return row.locator("td").nth(2)
 
     def get_event_date_text(self, row):
+        self.logger.info("Getting event date text")
         return row.locator("td").nth(3).text_content().strip()
 
     def get_event_price_text(self, row):
+        self.logger.info("Getting event price text")
         price= row.locator("td").nth(4).text_content()
         price=price.replace("$", "").replace(",", "")
         print("price is", price)
         return price
     def get_event_price_locator(self, row):
+        self.logger.info("Getting event price locator")
         return row.locator("td").nth(4)
 
     def get_event_total_seats(self, row):
+        self.logger.info("Getting event total seats")
         seats= row.locator("td").nth(5).text_content().split("/")[1]
         return seats
 
     def edit_event(self,row,new_title,new_price):
+        self.logger.info("Editing event with title: %s, price: %s", new_title, new_price)
         edit_event_button=row.get_by_test_id("edit-event-btn")
         self.click(edit_event_button)
         self.enter_text(self.event_title,new_title)
         self.enter_text(self.price,new_price)
         self.click(self.update_button)
+        self.logger.info("Event edited successfully")
        # print(self.result_table.all_text_contents())
         self.wait_for_element(self.result_table.filter(has_text=new_title))
 
     def delete_event(self,row):
+        self.logger.info("Deleting event")
         delete_button=row.get_by_test_id("delete-event-btn")
         # Click row Delete button
         self.click(delete_button)
@@ -107,6 +123,7 @@ class AdminPage(BasePage):
         expect(self.delete_event_button).to_be_visible()
         # Confirm deletion
         self.click(self.delete_event_button)
+        self.logger.info("Event deleted successfully")
         # # Verify row disappears
         # expect(row).not_to_be_visible()
 
