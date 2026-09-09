@@ -16,7 +16,6 @@ Execution Modes: Headed/Headless
 
 ## 📁 Project Directory Structure
 
-```text
 PlaywrightE2EFramework/
 ├── api/                   # API Object Model (AOM) wrapper classes
 │   ├── auth_api.py        # Authentication endpoint methods
@@ -28,13 +27,13 @@ PlaywrightE2EFramework/
 ├── constants/             # Application-wide constants & expected static values
 │   └── appconstants.py    # URL endpoints, titles, labels, error messages
 ├── logs/                  # Log outputs from test executions
-│   └── logfile.log        # File-based logger outputs
+│   └── logfile.log        
 ├── pages/                 # Page Object Model (POM) classes for UI layers
 │   ├── basepage.py        # Base Page wrapping Playwright browser actions
 │   ├── bookingpage.py     # Booking Page actions and elements (skeleton)
-│   ├── eventpage.py       # Event search/booking flow Page actions and elements
+│   ├── eventpage.py       # Event Page actions and elements
 │   ├── homepage.py        # Homepage actions, elements, and assertions
-│   ├── loginpage.py       # Login Page actions, validations, and forms
+│   ├── loginpage.py       # Login Page actions, validations
 │   ├── mybookingpage.py   # Bookings listing Page (skeleton)
 │  
 ├── reports/               # Test execution reports and artifacts
@@ -60,11 +59,9 @@ PlaywrightE2EFramework/
 │   ├── logger_util.py     # Logger initializer
 │   └── randomdata_util.py # Faker-based dummy data generator
 ├── conftest.py            # Global fixtures, hooks, and execution setups
-├── pytest.ini             # Framework-level runner settings and test configuration
+├── pytest.ini             # test configuration
 └── requirements.txt       # List of Python dependencies
 ```
-
----
 
 ### 🖥️ Page Objects (`pages/`)
 
