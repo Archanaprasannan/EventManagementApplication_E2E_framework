@@ -1,214 +1,467 @@
-
 # Playwright Python End-to-End Test Automation Framework
 
-This repository contains a comprehensive **hybrid test automation framework** for E2E testing of the **EventHub** web application. It is built using **Python**, **Playwright**, and **Pytest**, implementing clean Page Object Models (POM) for UI tests and structured API clients for API testing.
+## Overview
 
-Application_URL:https://eventhub.rahulshettyacademy.com/login
+This repository contains a **hybrid test automation framework** for the **EventHub** web application.
 
-browser types:
-Edge
-Chromium
-Firefox
+The framework is built using **Python, Playwright, and Pytest** and supports both:
 
-Execution Modes: Headed/Headless
+* 🌐 UI End-to-End testing
+* 🔌 REST API testing   
+
+The UI automation follows the **Page Object Model (POM)** design pattern, while API automation uses structured API client classes.
+
+The framework also includes reusable utilities for configuration management, test data generation, logging, screenshots, and test reporting.
+
+**Application:** EventHub
+**URL:** https://eventhub.rahulshettyacademy.com/login
+
+**Browsers:** Chromium, Edge, Firefox
+**Execution:** Headed / Headless
 
 ---
 
-## 📁 Project Directory Structure
+## 🛠️ Technologies & Tools
 
+| Technology        | Purpose                      |
+| ----------------- | ---------------------------- |
+| Python            | Programming language         |
+| Playwright        | UI and API automation        |
+| Pytest            | Test execution and framework |
+| APIRequestContext | REST API automation          |
+| Allure            | Test reporting               |
+| Pytest HTML       | HTML test reporting          |
+| Faker             | Dynamic test data generation |
+| Git / GitHub      | Source code management       |
+| Jenkins           | CI execution                 |
+
+---
+
+## 📁 Project Structure
+
+```text
 PlaywrightE2EFramework/
-├── api/                   # API Object Model (AOM) wrapper classes
-│   ├── auth_api.py        # Authentication endpoint methods
-│   ├── base_api.py        # Base HTTP methods (GET, POST, PUT, DELETE, etc.)
-│   ├── bookings_api.py    # Bookings endpoints management
-│   └── events_api.py      # Events endpoints management
-├── configs/               # Environment-specific configuration files
-│   └── config_qa.ini      # QA Environment configuration variables
-├── constants/             # Application-wide constants & expected static values
-│   └── appconstants.py    # URL endpoints, titles, labels, error messages
-├── logs/                  # Log outputs from test executions
-│   └── logfile.log        
-├── pages/                 # Page Object Model (POM) classes for UI layers
-│   ├── basepage.py        # Base Page wrapping Playwright browser actions
-│   ├── bookingpage.py     # Booking Page actions and elements (skeleton)
-│   ├── eventpage.py       # Event Page actions and elements
-│   ├── homepage.py        # Homepage actions, elements, and assertions
-│   ├── loginpage.py       # Login Page actions, validations
-│   ├── mybookingpage.py   # Bookings listing Page (skeleton)
-│  
-├── reports/               # Test execution reports and artifacts
-│   ├── allure-results/    # Raw Allure test result JSON files
-│   └── report.html        # Auto-generated Pytest HTML execution report
-├── screenshots/           # Failed-test screenshots automatically captured during teardown
-├── testdata/              # Test inputs externalized by file format
-│   ├── csv/               # CSV test data files
-│   ├── excel/             # Excel sheets (e.g. data-driven inputs)
-│   └── json/              # JSON request payloads
-├── tests/                 # Automated Test Cases directory
-│   ├── api/               # API endpoint test suites
+│
+├── api/
+│   ├── auth_api.py
+│   ├── base_api.py
+│   ├── bookings_api.py
+│   └── events_api.py
+│
+├── configs/
+│   └── config_qa.ini
+│
+├── constants/
+│   └── appconstants.py
+│
+├── pages/
+│   ├── basepage.py
+│   ├── bookingpage.py
+│   ├── eventpage.py
+│   ├── homepage.py
+│   ├── loginpage.py
+│   └── mybookingpage.py
+│
+├── reports/
+│   ├── allure-results/
+│   └── report.html
+│
+├── screenshots/
+│
+├── testdata/
+│   ├── csv/
+│   ├── excel/
+│   └── json/
+│
+├── tests/
+│   ├── api/
 │   │   ├── bookings_api_test.py
 │   │   ├── events_api_test.py
 │   │   └── login_api_test.py
-│   └── ui/                # UI interface end-to-end test suites
+│   │
+│   └── ui/
 │       ├── event_page_test.py
 │       ├── home_page_test.py
 │       └── login_page_test.py
-├── utils/                 # General-purpose utility and helper modules
-│   ├── config_reader_util.py # Config ini file parser
-│   ├── excel_util.py      # Excel operations helper
-│   ├── logger_util.py     # Logger initializer
-│   └── randomdata_util.py # Faker-based dummy data generator
-├── conftest.py            # Global fixtures, hooks, and execution setups
-├── pytest.ini             # test configuration
-└── requirements.txt       # List of Python dependencies
+│
+├── utils/
+│   ├── config_reader_util.py
+│   ├── excel_util.py
+│   ├── logger_util.py
+│   └── randomdata_util.py
+│
+├── conftest.py
+├── pytest.ini
+└── requirements.txt
 ```
 
-### 🖥️ Page Objects (`pages/`)
+---
 
-#### 📄 `basepage.py`
-- **Class:** `BasePage`
-- **Purpose:** Serves as the parent class for all pages. Wraps Playwright's `page` calls with generic wrapper methods (e.g., `click()`, `enter_text()`, `get_text()`, `is_visible()`, `wait_for_element()`, `get_page_url()`, and `get_page_title()`) to provide robust execution, cleaner syntax, and auto-waiting behaviors.
+# 🖥️ UI Automation
 
-#### 📄 `loginpage.py`
-- **Class:** `LoginPage(BasePage)`
-- **Purpose:** Identifies page locators for email/password text boxes, register link, Sign In button, and various field-validation messages. Defines standard navigation checks and the core action `do_login(email, password)`.
+The UI automation layer follows the **Page Object Model (POM)** approach.
 
-#### 📄 `homepage.py`
-- **Class:** `HomePage(BasePage)`
-- **Purpose:** Holds locators and validation methods for the Post-Login homepage (user profile icon, log out button, navigation menus, upcoming event cards, and browse button). Contains flow redirection methods like `do_browse_events()`.
+### `BasePage`
 
-#### 📄 `eventpage.py`
-- **Class:** `EventPage(BasePage)`
-- **Purpose:** Models the Event searching and discovery layout. Manages the event search text field, result assertions, and booking redirects.
+Provides reusable Playwright actions such as:
 
-#### 📄 `bookingpage.py`, `mybookingpage.py`
-- **Classes:** `BookingPage(BasePage)`, `MyBookingpage(BasePage)`
-- **Purpose:** Reusable skeletons configured to model booking registration,  and listing/cancellation dashboard checks.
+* Click
+* Enter text
+* Get text
+* Check element visibility
+* Wait for elements
+* Get page URL
+* Get page title
+
+This keeps common browser interactions in one place and reduces duplication across page classes.
+
+### `LoginPage`
+
+Handles:
+
+* Email and password fields
+* Login button
+* Register navigation
+* Login validation messages
+* Valid and invalid login scenarios
+
+### `HomePage`
+
+Handles:
+
+* User profile
+* Logout
+* Navigation menu
+* Upcoming events
+* Browse Events navigation
+* My Bookings navigation
+
+### `EventPage`
+
+Handles:
+
+* Event search
+* Event results
+* Event details
+* Booking navigation
+
+### `BookingPage`
+
+Contains the page objects and actions related to event booking.
+
+### `MyBookingPage`
+
+Handles the My Bookings page and booking-related validations.
 
 ---
 
-### 🔌 API Client Objects (`api/`)
+# 🔌 API Automation
 
-#### 📄 `base_api.py`
-- **Class:** `BaseAPI`
-- **Purpose:** Wraps Playwright's HTTP client (`APIRequestContext`). Exposes simplified methods for performing asynchronous-compatible `GET`, `POST`, `PUT`, `DELETE`, `PATCH` requests against configured backends.
+The API layer uses Playwright's **APIRequestContext** for REST API testing.
 
-#### 📄 `auth_api.py`
-- **Class:** `AuthAPI(BaseAPI)`
-- **Purpose:** Models authentication operations. Offers the `api_login()` function which POSTs credentials to `/api/auth/login` to retrieve active Bearer authorization tokens.
+### `BaseAPI`
 
-#### 📄 `events_api.py`
-- **Class:** `EventsAPI(BaseAPI)`
-- **Purpose:** Focuses on query operations. Fetches all events or filters down to a single event by attaching authorization tokens to standard GET endpoint calls.
+Provides reusable HTTP methods for:
 
-#### 📄 `bookings_api.py`
-- **Class:** `BookingsAPI(BaseAPI)`
-- **Purpose:** Facilitates user bookings workflows: booking creation, fetching user-specific bookings, retrieving individual booking items, and executing cancellations.
+* GET
+* POST
+* PUT
+* PATCH
+* DELETE
 
----
+### `AuthAPI`
 
-### 🛠️ Configuration & Utility Classes (`utils/`, `constants/`, `configs/`)
+Handles authentication APIs, including:
 
-#### 📄 `config_reader_util.py`
-- **Class:** `ConfigReader`
-- **Purpose:** Utilizes `configparser` to load properties from `configs/config_qa.ini`. Supplies static methods to retrieve environment URLs, execution modes (headless/headed), credentials, and browser parameters.
+* Login
+* Bearer token generation
+* Authentication-related API operations
 
-#### 📄 `appconstants.py`
-- **Class:** `AppConstants`
-- **Purpose:** Standardized storage for static verification values (e.g. expected titles, validation labels, success strings, and API endpoint URIs) to prevent duplication across files.
+### `EventsAPI`
 
-#### 📄 `randomdata_util.py`
-- **Class:** `Randomdata`
-- **Purpose:** Uses `Faker` to generate real-time realistic usernames, emails, passwords, and addresses for dynamic UI form validation and API requests.
+Handles Event APIs such as:
 
-#### 📄 `logger_util.py`
-- **Purpose:** Configures and provides a standardized `logging` helper that outputs timestamps, log-levels, and diagnostic information to `logs/logfile.log`.
+* Get all events
+* Get individual event
+* Create event
+* Update event
+* Delete event
 
----
+### `BookingsAPI`
 
-## 🧪 Test Suites & Cases Inventory
+Handles booking-related APIs such as:
 
-### 🌐 UI Tests (`tests/ui/`)
-
-| TC ID | Test Case Function | Description |
-| :--- | :--- | :--- |
-| **TC_001** | `test_get_login_page_title` | Verifies the login page displays the title `EventHub — Discover & Book Events`. |
-| **TC_002** | `test_get_login_page_url` | Validates redirection / base path loads the correct EventHub Login URL. |
-| **TC_003** | `test_email_field_exist` | Confirms the Email input text box is visible to the user. |
-| **TC_004** | `test_password_field_exist` | Confirms the Password input text box is visible to the user. |
-| **TC_005** | `test_login_button_exist` | Confirms the "Sign In" CTA button is visible. |
-| **TC_006** | `test_register_button_exist` | Confirms the link to the "Register" form is present. |
-| **TC_007** | `test_login_with_invalid_credentials` | Inputs fake credentials and asserts the warning message `Invalid email or password`. |
-| **TC_008** | `test_login_with_blank_email` | Attempts sign-in with empty email and checks for validation feedback `Enter a valid email`. |
-| **TC_009** | `test_login_with_blank_password` | Attempts sign-in with valid email but blank password, asserting validation: `Password must be at least 6 characters`. |
-| **TC_010** | `test_do_valid_login` | Enters configuration credentials, clicks login, and asserts redirection to the homepage. |
-| **TC_011** | `test_home_page_title` | Asserts title after successful login routing. |
-| **TC_012** | `test_home_page_url` | Asserts the URL matches the application base URL post-authentication. |
-| **TC_013** | `test_user_profile_icon_visible` | Validates that the active user's profile display element is visible on the top nav. |
-| **TC_014** | `test_logout_button_visible` | Validates that the logout button element is present. |
-| **TC_015** | `test_navigation_menu_visible` | Confirms the responsive top navigation menu bar is displayed. |
-| **TC_016** | `test_browse_events_visible` | Validates that the user can locate the "Browse Events" button. |
-| **TC_017** | `test_upcoming_events_section_visible` | Confirms that dynamic event cards are rendering correctly inside the upcoming events container. |
-| **TC_018** | `test_my_bookings_link_visible` | Asserts visibility of the "My Bookings" button/link in the menu. |
-| **TC_019** | `test_my_booking_page_title` | Verifies the page title once navigated to the My Bookings tab. |
-| **TC_020** | `test_my_booking_page_url` | Verifies the page URL matches expectations. |
-| **TC_021** | `test_my_booking_page_url` | Verifies the page URL matches expectations. |
-| **TC_022** | `test_search_event_with_keyword` | Searches for an event using a keyword and verifies the count of events displayed. |
-| **TC_023** | `test_get_event_page_title` | Verifies the page title once navigated to the Events tab. |
-| **TC_024** | `test_get_event_page_url` | Verifies the page URL matches expectations. |
-| **TC_025** | `test_admin_page_title` | Verifies the admin page title. |
-| **TC_026** | `test_admin_page_url` | Verifies the admin page url. |
-| **TC_027** | `test_admin_logout_button_visibility` | Verifies admin logout button is visible. |
-| **TC_028** | `test_admin_add_event_button_visibility` | Verifies admin add event button is visible. |
-| **TC_029** | `test_admin_edit_event_button_visibility` | Verifies admin edit event button is visible. |
-| **TC_030** | `test_admin_delete_event_button_visibility` | Verifies admin delete event button is visible. |
-| **TC_031** | `test_add_event` | Verifies add event. |
-| **TC_032** | `test_edit_event` | Verifies edit event. |
-| **TC_033** | `test_delete_event` | Verifies delete event. |
-
-
-### ⚙️ API Tests (`tests/api/`)
-
-| TC ID | Test Case Function | Description |
-| :--- | :--- | :--- |
-| **TC_034** | `test_api_login_with_valid_credentials` | Logs in with valid credentials and retrieves an authorization token. |
-| **TC_035** | `test_api_login_with_invalid_credentials` | Attempts to log in with invalid credentials and asserts that an error is returned. |
-| **TC_036** | `test_api_get_all_events` | Retrieves a list of all available events. |
-| **TC_037** | `test_api_get_events_with_valid_token` | Retrieves events using a valid authorization token. |
-| **TC_038** | `test_api_get_events_with_invalid_token` | Attempts to retrieve events with an invalid or expired token. |
+* Create booking
+* Get bookings
+* Get individual booking
+* Cancel booking
 
 ---
 
-## 🚀 Running the Tests
+# 🛠️ Utilities & Configuration
 
-To configure and run the automated execution suites:
+### Configuration
 
-### 1. Installation
-Ensure PyCharm/Venv is active, then run:
+`config_reader_util.py` reads environment-specific configuration from `.ini` files.
+
+Configuration includes:
+
+* Application URL
+* API URL
+* Username
+* Password
+* Browser
+* Headless / headed execution
+
+### Test Data
+
+`randomdata_util.py` uses **Faker** to generate dynamic test data such as:
+
+* Names
+* Email addresses
+* Passwords
+* Addresses
+
+### Logging
+
+`logger_util.py` provides centralized logging for test execution and troubleshooting.
+
+Logs are stored under:
+
+```text
+logs/logfile.log
+```
+
+### Constants
+
+`appconstants.py` stores reusable application constants such as:
+
+* URLs
+* API endpoints
+* Expected titles
+* Validation messages
+* Other static values
+
+---
+
+# 🧪 Test Coverage
+
+## 🌐 UI Tests
+
+The UI test suite covers:
+
+### Login
+
+* Login page title
+* Login page URL
+* Email field visibility
+* Password field visibility
+* Login button visibility
+* Register button visibility
+* Invalid credentials
+* Blank email
+* Blank password
+* Valid login
+
+### Home Page
+
+* Page title
+* Page URL
+* User profile visibility
+* Logout button
+* Navigation menu
+* Browse Events
+* Upcoming Events
+* My Bookings navigation
+
+### Events
+
+* Events page title
+* Events page URL
+* Event search
+* Event results
+
+### Bookings
+
+* My Bookings page navigation
+* My Bookings page title
+* My Bookings page URL
+
+---
+
+## ⚙️ API Tests
+
+The API test suite covers:
+
+### Authentication
+
+* Login with valid credentials
+* Login with invalid credentials
+* Authentication token validation
+
+### Events
+
+* Get all events
+* Get event with valid token
+* Get event with invalid token
+
+### Bookings
+
+* Booking API workflows
+* Booking retrieval
+* Booking-related validations
+
+---
+
+# 🔄 End-to-End Workflow
+
+The framework supports testing complete application workflows across UI and API layers.
+
+Example workflow:
+
+```text
+Login
+  ↓
+Home Page
+  ↓
+Browse Events
+  ↓
+Search Event
+  ↓
+Select Event
+  ↓
+Book Event
+  ↓
+My Bookings
+```
+
+---
+
+# 🌎 Environment Configuration
+
+The framework supports environment-based configuration.
+
+Example:
+
+```text
+configs/
+└── config_qa.ini
+```
+
+Configuration values are externalized rather than hardcoded inside test cases.(from command line)
+
+This allows the same tests to be executed against different environments with minimal changes.
+
+---
+
+# Installation
+
+Clone the repository and install the required dependencies.
+
 ```bash
 pip install -r requirements.txt
+```
+
+Install Playwright browsers:
+
+```bash
 playwright install
 ```
 
-### 2. Execution Commands
+---
+
+# ▶️ Running the Tests
+
+### Run all tests
+
 ```bash
-# Run all tests (UI & API)
 pytest
+```
 
-# Run only UI tests
+### Run UI tests
+
+```bash
 pytest -m ui
+```
 
-# Run only API tests
+### Run API tests
+
+```bash
 pytest -m api
+```
 
-# Run regression suite
+### Run regression tests
+
+```bash
 pytest -m regression
 ```
 
-### 3. Reporting
-Allure results are outputted to `reports/allure-results/`.
-HTML reporting is outputted to `reports/report.html`.
+### Run tests in headed mode
 
-# EventManagementApplication_E2E_framework
-Automation framework for handling an EventManagement application : UI automation, E2E automation, API automation
+```bash
+pytest --headed
+```
 
+---
+
+# 📊 Reporting
+
+The framework supports multiple reporting options.
+
+### Pytest HTML Report
+
+The HTML report is generated under:
+
+```text
+reports/report.html
+```
+
+### Allure Report
+
+Raw Allure results are stored under:
+
+```text
+reports/allure-results/
+```
+
+Generate and open the Allure report using:
+
+```bash
+allure serve reports/allure-results
+```
+
+---
+
+# 📸 Failure Screenshots
+
+Screenshots are automatically captured for failed UI tests and stored under:
+
+```text
+screenshots/
+```
+
+These screenshots help with debugging failed test executions.
+
+---
+
+---
+
+# 📈 Future Enhancements
+
+Potential improvements include:
+
+* Expanded API/UI test coverage
+* Additional negative API/UI scenarios
+* Data-driven testing
+* CI/CD pipeline integration
+* Enhanced Allure reporting
+
+---
+
+# 👩‍💻 Author
+
+**Archana Prasannan**
+
+QA Automation Engineer
+
+**Focus:** UI Automation | API Automation | Python | Playwright | Pytest | Allure reporting | Parallel execution | cross browser Testing
