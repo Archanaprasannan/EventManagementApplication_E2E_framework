@@ -61,4 +61,9 @@ class TestHomePage:
         actual_my_bookings_link_visibility = home_page.is_my_bookings_link_visible()
         assert actual_my_bookings_link_visibility == True
 
-
+    @allure.feature("Home")
+    @allure.story("Home Page logout verification")
+    @allure.title("TC_019 - Verify logout functionality")
+    def test_logout(self, home_page):
+        login_page=home_page.do_logout()
+        assert login_page.get_login_page_title()== AppConstants.EXPECTED_LOGIN_PAGE_TITLE

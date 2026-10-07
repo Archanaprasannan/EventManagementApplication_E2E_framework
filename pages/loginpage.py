@@ -53,7 +53,7 @@ class LoginPage(BasePage):
 
     def do_login(self, email, password):
         try:
-            self.logger.info("Doing login with valid email and password")
+            self.logger.info("Doing login with email and password")
             self.enter_text(self.email_input, email)
             self.enter_text(self.password_input, password)
             self.click(self.login_button)

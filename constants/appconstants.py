@@ -23,8 +23,13 @@ class AppConstants:
     INVALID_EVENT_NAME="Invalid Event"
     DROPDOWN_CATEGORY_VALUE="Concert"
 
+    #booking page
+    EXPECTED_BOOKING_PAGE_TITLE="EventHub — Discover & Book Events"
+    EXPECTED_BOOKING_PAGE_URL="https://eventhub.rahulshettyacademy.com/"
+    BOOKING_EVENT_NAME="Dilli Diwali Mela"
     #admin page
     EXPECTED_ADMIN_PAGE_TITLE="EventHub — Discover & Book Events"
+    CONFIRM_BOOKING_MESSAGE="Booking Confirmed! 🎉"
 
     #admin page: create event
     DESCRIPTION="Art workshop for students"

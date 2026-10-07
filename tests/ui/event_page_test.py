@@ -10,7 +10,7 @@ class TestEventPage:
     @allure.story("Event Page verification")
     @allure.title("TC_019 - Verify event page title")
     def test_event_page_title(self,event_page):
-        actual_event_page_title= event_page.get_event_page_title()
+        actual_event_page_title= event_page.get_et_page_title()
         assert actual_event_page_title == AppConstants.EXPECTED_EVENT_PAGE_TITLE
 
     @allure.feature("Event Page")
@@ -51,4 +51,4 @@ class TestEventPage:
        event_page.select_category(AppConstants.DROPDOWN_CATEGORY_VALUE)
        actual_event_page_search_result= event_page.get_events_by_category(AppConstants.DROPDOWN_CATEGORY_VALUE)
        expect(actual_event_page_search_result.first).to_be_visible()
-       
+

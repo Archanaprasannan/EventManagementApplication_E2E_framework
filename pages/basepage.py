@@ -8,7 +8,7 @@ class BasePage:
         self.page.goto(url)
 
     def click(self, locator):
-        locator.wait_for(state="visible")
+        locator.wait_for(state="visible",timeout=40000)
         locator.click()
 
     def enter_text(self, locator, value):

@@ -121,6 +121,10 @@ def event_page(home_page):
     return home_page.do_browse_events()
 
 @pytest.fixture
+def booking_page(event_page):
+    return event_page.click_book_now(AppConstants.BOOKING_EVENT_NAME)
+
+@pytest.fixture
 def admin_page(event_page):
     return event_page.add_event()
 

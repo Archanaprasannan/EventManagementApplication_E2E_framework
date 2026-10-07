@@ -1,8 +1,6 @@
 from logs.logger_util import Logger
 from pages.basepage import BasePage
 from playwright.sync_api import expect
-from pages.eventpage import EventPage
-
 
 class HomePage(BasePage):
     def __init__(self, page):
@@ -54,6 +52,7 @@ class HomePage(BasePage):
             self.logger.info("Browsing events")
             self.click(self.browse_events_button)
             self.logger.info("Navigated to event page")
+            from pages.eventpage import EventPage
             return EventPage(self.page)
         except Exception as e:
             self.logger.error("Browse events failed")
@@ -64,6 +63,7 @@ class HomePage(BasePage):
             self.logger.info("Logging out")
             self.click(self.logout_button)
             self.logger.info("Logged out successfully")
+            from pages.loginpage import LoginPage
             return LoginPage(self.page)
         except Exception as e:
             self.logger.error("Logout failed")

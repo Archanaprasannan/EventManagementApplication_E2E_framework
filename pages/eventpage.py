@@ -1,9 +1,9 @@
 from logs.logger_util import Logger
-from pages.adminpage import AdminPage
+
 from pages.basepage import BasePage
 from constants.appconstants import AppConstants
 from playwright.sync_api import expect
-from pages.bookingpage import BookingPage
+
 
 
 class EventPage(BasePage):
@@ -15,6 +15,9 @@ class EventPage(BasePage):
         self.category_dropdown.wait_for(state="visible")
         self.search_element_by_category_result=page.get_by_text("Concert")
         self.add_event_button=page.locator("//button[@type='button']")
+        self.event_result=None
+        self.book_event_button=None
+
         
     def get_event_page_title(self):
         self.logger.info("Getting event page title")
@@ -35,13 +38,23 @@ class EventPage(BasePage):
         self.event_result=self.page.locator("[data-testid='event-card']").filter(has_text=event_name)
         return self.event_result   
 
-    def click_book_now(self):
+    def click_book_now(self, event_name):
         self.logger.info("Clicking book now button")
-        self.book_event_button = self.event_result.get_by_test_id("book-now-btn")
+        if event_name:
+            self.do_event_search(event_name)
+            event_card = self.get_event_search_result(event_name)
+        else:
+            event_card = self.page.locator("[data-testid='event-card']").first
+        self.book_event_button = event_card.get_by_test_id("book-now-btn")
         self.click(self.book_event_button)
-        self.page.wait_for_url("**/events/*")
-        self.logger.info("Navigated to booking page")   
-        return BookingPage(self.page)
+        #self.customer_name.wait_for(state="visible", timeout=30000)
+
+        #self.page.wait_for_url("**/events/*",timeout=10000)
+        self.logger.info("Navigated to booking page")
+        from pages.bookingpage import BookingPage
+        booking_page = BookingPage(self.page)
+        booking_page.wait_for_page_load()
+        return booking_page
 
     def select_category(self,category):
         self.logger.info("Selecting category: %s", category)
@@ -66,6 +79,7 @@ class EventPage(BasePage):
             self.logger.info("Adding event")
             self.click(self.add_event_button)
             self.logger.info("Navigated to admin page")
+            from pages.adminpage import AdminPage
             return AdminPage(self.page)
         except Exception as e:
             self.logger.error("Add event failed")
